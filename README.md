@@ -1,2 +1,2 @@
-# MiniRT
-My first ray-tracer :o
+<h1 align="center">MiniRT
+  
