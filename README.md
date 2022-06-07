@@ -10,3 +10,5 @@
 <p align="center"><img src="https://github.com/Qwazertyx/MiniRT/blob/main/imgs/minirt4.png?raw=true" width="500px"></p>
       <h4 align="center">Day five:</h4>
 <p align="center"><img src="https://github.com/Qwazertyx/MiniRT/blob/main/imgs/minirt5.png?raw=true" width="500px"></p>
+      <h4 align="center">Day six:</h4>
+<p align="center"><img src="https://github.com/Qwazertyx/MiniRT/blob/main/imgs/minirt6.png?raw=true" width="500px"></p>
