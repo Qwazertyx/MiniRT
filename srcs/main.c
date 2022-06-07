@@ -116,6 +116,8 @@ int	get_triple_do(char *s, t_vec *t)
 	split = ft_split(s, ',');
 	if (!split)
 		return (0);
+	if (split[3])
+		return (free_split(split));
 	t->x = ft_atof(split[0]);
 	t->y = ft_atof(split[1]);
 	t->z = ft_atof(split[2]);
@@ -129,6 +131,12 @@ int	get_triple_un(char *s, unsigned char t[3])
 
 	split = ft_split(s, ',');
 	if (!split)
+		return (0);
+	if (split[3])
+		return (free_split(split));
+	if (ft_atoi(split[0]) < 0 || ft_atoi(split[0]) > 255 \
+	|| ft_atoi(split[1]) < 0 || ft_atoi(split[1]) > 255 \
+	|| ft_atoi(split[2]) < 0 || ft_atoi(split[2]) > 255)
 		return (0);
 	t[0] = (unsigned char)ft_atoi(split[0]);
 	t[1] = (unsigned char)ft_atoi(split[1]);
@@ -419,11 +427,12 @@ int	parse_struc(t_var *p, char *file)
 	temp = get_next_line(fd);
 	while (temp > 0)
 	{
-		// dprintf(2, "-%s\n", temp);
-		all_line = ft_add_line(all_line, temp);
+		if (temp[0] != '\n')
+			all_line = ft_add_line(all_line, temp);
+		else
+			free(temp);
 		temp = get_next_line(fd);
 		// temp = no_double_space(temp);
-		// dprintf(2, "=%s\n", temp);
 	}
 	close(fd);
 	fd = ft_malloc_all(all_line, p);
@@ -465,18 +474,20 @@ int	ft_is_triint(char *s)
 
 	i = 0;
 	j = 0;
-	while (++j <= 3)
+	ret = 0;
+	while (s[i])
 	{
-		ret = i;
-		while (s[i] && s[i] >= '0' && \
-		s[i] <= '9' && i < ret + 3)
+		while (s[i] && s[i] >= '0' && s[i] <= '9')
 			i++;
-		if (s[i] && s[i] != ',')
+		if (s[i] && s[i] == ',')
+			ret++;
+		if (ret > 2)
 			return (0);
 		if (s[i])
 			i++;
 	}
-	get_triple_un(s, t);
+	if (!get_triple_un(s, t))
+		return (0);
 	if (t[0] > 255 || t[0] < 0 || t[1] > 255 || \
 	t[1] < 0 || t[2] > 255 || t[2] < 0)
 		return (0);
@@ -696,9 +707,11 @@ int	verif_input(char *file)
 	temp = no_double_space(get_next_line(fd));
 	while (temp > 0)
 	{
-		// dprintf(2, "%s\n", temp);
-		all_line = ft_add_line(all_line, temp);
-		temp = no_double_space(get_next_line(fd));
+		if (temp[0] != '\n')
+			all_line = ft_add_line(all_line, no_double_space(temp));
+		else
+			free(temp);
+		temp = get_next_line(fd);
 	}
 	close(fd);
 	fd = ft_verif(all_line);
