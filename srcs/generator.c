@@ -63,14 +63,21 @@ double	contactsp(t_sp sphere, t_ray ray, t_var *p)
 	return (root);
 }
 
-//int	colortrgb(double t, double r, double g, double b)
-//
-//	t *= 255.99;
-//	r *= 255.99;
-//	g *= 255.99;
-//	b *= 255.99;
-//	return ((int)t << 24 | (int)r << 16 | (int)g << 8 | (int)b);
-//
+double	contactpl(t_pl plane, t_ray ray, t_var *p)
+{
+	double	denom;
+	double	t;
+
+	denom = vecdot(plane.way, ray.direction);
+	t = 0;
+	if (abs(denom) > 0.00001)
+		t = vecdot(vecsub(plane.xyz, ray.origin), plane.way) / denom;
+	if (t < 0.00001)
+		return (0);
+	p->data->po = vecadd(ray.origin, vecmult(ray.direction, t));
+	p->data->no = plane.way;
+	return (t);
+}
 
 int	colortrgb(int t, int r, int g, int b)
 {
@@ -116,27 +123,39 @@ double	intershadow(t_ray myray, t_var *p)
 		}
 		i++;
 	}
+	i = 0;
+	while (p->pl[i].exist)
+	{
+		dist = contactpl(p->pl[i], rebund, p);
+		if (dist && dist < min_t)
+		{
+			min_t = dist;
+			p->data->smno = p->data->no;
+			p->data->smpo = p->data->po;
+		}
+		i++;
+	}
 	if (min_t * min_t > vecnorm(vecsub(p->l->xyz, p->data->shadowpo)))
 		return (0.9);
 	return (0);
 }
 
-double	returnluxa(t_vec lux, int csp, t_var *p)
+double	returnluxa(t_vec lux, unsigned char *color, t_var *p)
 {
 	return (colorrgb(goodlux(lux.x + goodlux(p->a->rgb[0] * p->a->ratio \
-	* p->sp[csp].rgb[0] / 255)), \
+	* color[0] / 255)), \
 					goodlux(lux.y + goodlux (p->a->rgb[1] * p->a->ratio \
-	* p->sp[csp].rgb[1] / 255)), \
+	* color[1] / 255)), \
 					goodlux(lux.z + goodlux(p->a->rgb[2] * p->a->ratio \
-	* p->sp[csp].rgb[2] / 255))));
+	* color[2] / 255))));
 }
 
-double	raycolor(t_ray myray, double min_t, t_var *p, int csp)
+double	raycolor(t_ray myray, double min_t, t_var *p, unsigned char *color)
 {
 	double	dist;
 	t_vec	lux;
 
-	lux = newvec(p->sp[csp].rgb[0], p->sp[csp].rgb[1], p->sp[csp].rgb[2]);
+	lux = newvec(color[0], color[1], color[2]);
 	p->data->depthmax--;
 	if (min_t != 99999999999999)
 	{
@@ -144,17 +163,29 @@ double	raycolor(t_ray myray, double min_t, t_var *p, int csp)
 		lux = vecmult(lux, p->l->ratio * 50000 * goodlux(vecdot(\
 		getnormalized(vecsub(p->l->xyz, p->data->smpo)), p->data->smno) \
 		/ vecnorm(vecsub(p->l->xyz, p->data->smpo))));
-		return (returnluxa(lux, csp, p));
+		return (returnluxa(lux, color, p));
 	}
 	return (colorrgb(0, 0, 0));
 }
 
+void	assignrgb(unsigned char *dst, unsigned char *src)
+{
+	int	i;
+
+	i = 0;
+	while (i < 3)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+}
+
 double	inter(t_ray myray, t_var *p)
 {
-	int		i;
-	int		colorsp;
-	double	min_t;
-	double	dist;
+	int				i;
+	unsigned char	rgb[3];
+	double			min_t;
+	double			dist;
 
 	i = 0;
 	min_t = 99999999999999;
@@ -164,13 +195,26 @@ double	inter(t_ray myray, t_var *p)
 		if (dist && dist < min_t)
 		{
 			min_t = dist;
-			colorsp = i;
+			assignrgb(rgb, p->sp[i].rgb);
 			p->data->smno = p->data->no;
 			p->data->smpo = p->data->po;
 		}
 		i++;
 	}
-	return (raycolor(myray, min_t, p, colorsp));
+	i = 0;
+	while (p->pl[i].exist)
+	{
+		dist = contactpl(p->pl[i], myray, p);
+		if (dist && dist < min_t)
+		{
+			min_t = dist;
+			assignrgb(rgb, p->pl[i].rgb);
+			p->data->smno = p->data->no;
+			p->data->smpo = p->data->po;
+		}
+		i++;
+	}
+	return (raycolor(myray, min_t, p, rgb));
 }
 
 void	algo(t_var *p, int x, int y)

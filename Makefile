@@ -63,6 +63,7 @@ SOURCES	=	debug.c					\
 			windows.c				\
 			generator.c				\
 			vectors.c				\
+			simplify.c				\
 
 
 ##*********##

@@ -738,6 +738,7 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	print_everything(&p);
+	simplify(&p);
 	windowsop(&p);
 	free_struc(&p);
 }
