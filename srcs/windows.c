@@ -33,13 +33,14 @@ int	key_hook(int keycode, t_var *p)
 		p->c->xyz.x += 5;
 
 	if (keycode == 126)
-		p->c->way.y += 5;
+		p->c->way.y += 0.05;
 	if (keycode == 123)
-		p->c->way.x -= 5;
+		p->c->way.x -= 0.05;
 	if (keycode == 125)
-		p->c->way.y -= 5;
+		p->c->way.y -= 0.05;
 	if (keycode == 124)
-		p->c->way.x += 5;
+		p->c->way.x += 0.05;
+	
 	generator(p);
 	return (0);
 }

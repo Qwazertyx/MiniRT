@@ -21,7 +21,7 @@ void	print_c(t_c *fig)
 	while (fig[++i].exist)
 	{
 		dprintf(2, "c[%d]->xyz = %f,%f,%f\n", i, fig[i].xyz.x, fig[i].xyz.y, fig[i].xyz.z);
-		dprintf(2, "c[%d]->way = %f,%f,%f\n", i, fig[i].xyz.x, fig[i].xyz.y, fig[i].xyz.z);
+		dprintf(2, "c[%d]->way = %f,%f,%f\n", i, fig[i].way.x, fig[i].way.y, fig[i].way.z);
 		dprintf(2, "c[%d]->fov = %d\n", i, fig[i].fov);
 		dprintf(2, "\n");
 	}
@@ -95,4 +95,9 @@ void	print_everything(t_var *p)
 	print_sp(p->sp);
 	print_pl(p->pl);
 	print_cy(p->cy);
+}
+
+void	print_vec(t_vec t)
+{
+	dprintf(1, "%f	%f	%f\n", t.x, t.y, t.z);
 }

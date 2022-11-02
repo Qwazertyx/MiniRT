@@ -423,6 +423,8 @@ int	parse_struc(t_var *p, char *file)
 	int		fd;
 
 	fd = open(file, O_RDONLY);
+	if (fd < 0)
+		return (0);
 	all_line = NULL;
 	temp = get_next_line(fd);
 	while (temp > 0)
@@ -696,6 +698,18 @@ int	ft_verif(char **lines)
 	return (1);
 }
 
+int	is_empty(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] && (s[i] == ' ' || s[i] == '	'))
+		i++;
+	if ((s[i] && s[i] == '\n') || !s[i])
+		return (0);
+	return (1);
+}
+
 int	verif_input(char *file)
 {
 	char	**all_line;
@@ -703,11 +717,13 @@ int	verif_input(char *file)
 	int		fd;
 
 	fd = open(file, O_RDONLY);
+	if (fd < 0)
+		return (0);
 	all_line = NULL;
-	temp = no_double_space(get_next_line(fd));
+	temp = get_next_line(fd);
 	while (temp > 0)
 	{
-		if (temp[0] != '\n')
+		if (is_empty(temp))
 			all_line = ft_add_line(all_line, no_double_space(temp));
 		else
 			free(temp);
@@ -738,7 +754,7 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	print_everything(&p);
-	simplify(&p);
+	// simplify(&p);
 	windowsop(&p);
 	free_struc(&p);
 }

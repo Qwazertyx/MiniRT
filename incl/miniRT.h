@@ -40,6 +40,13 @@ typedef struct s_data
 	t_vec			shadowno;
 }					t_data;
 
+//Rays
+typedef struct s_ray
+{
+	t_vec	origin;
+	t_vec	direction;
+}				t_ray;
+
 //Ambient lightning:
 typedef struct s_a
 {
@@ -75,6 +82,7 @@ typedef struct s_sp
 	int				exist;
 }				t_sp;
 
+
 //Plane:
 typedef struct s_pl
 {
@@ -83,6 +91,7 @@ typedef struct s_pl
 	unsigned char	rgb[3];
 	int				exist;
 }				t_pl;
+
 
 //Cylinder:
 typedef struct s_cy
@@ -95,13 +104,6 @@ typedef struct s_cy
 	int				exist;
 }				t_cy;
 
-
-//Rays
-typedef struct s_ray
-{
-	t_vec	origin;
-	t_vec	direction;
-}				t_ray;
 
 ////hitrecord
 //typedef struct s_hitrc
@@ -125,10 +127,25 @@ typedef struct s_var
 	t_vec	*vec;
 	double	t_min;
 	double	t_max;
+	int		x;
+	int		y;
 }				t_var;
+
+//OBJECTS
+double	contactsp(t_sp sphere, t_ray ray, t_var *p);
+double	contactpl(t_pl plane, t_ray ray, t_var *p);
+double	contactcy(t_cy cyl, t_ray ray, t_var *p);
+double	contactcap(t_cy cyl, t_ray ray, t_var *p);
+double	contactcap2(t_cy cyl, t_ray ray, t_var *p);
+double	shadow_contactsp(t_sp sphere, t_ray ray, t_var *p);
+double	shadow_contactpl(t_pl plane, t_ray ray, t_var *p);
+double	shadow_contactcy(t_cy cyl, t_ray ray, t_var *p);
+double	shadow_contactcap(t_cy cyl, t_ray ray, t_var *p);
+double	shadow_contactcap2(t_cy cyl, t_ray ray, t_var *p);
 
 //PRINT
 void	print_everything(t_var *p);
+void	print_vec(t_vec t);
 
 //FREE
 void	free_struc(t_var *p);
@@ -159,6 +176,7 @@ int		closewin(t_data *data);
 
 //VECTORS UTILS
 t_vec	vecadd(t_vec v1, t_vec v2);
+t_vec	vecadd3(t_vec v1, t_vec v2, t_vec v3);
 t_vec	vecsub(t_vec v1, t_vec v2);
 t_vec	vecmult(t_vec v1, double mult);
 t_vec	vecdiv(t_vec v1, double mult);
@@ -172,5 +190,8 @@ double	veclen(t_vec v1);
 t_vec	vecat(t_ray ray, double t);
 t_vec	getnorm(t_vec v1);
 t_vec	getnormalized(t_vec v1);
+
+
+void	assignrgb(unsigned char *dst, unsigned char *src);
 
 #endif

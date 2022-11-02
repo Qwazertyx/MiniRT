@@ -1,7 +1,5 @@
 #include "../incl/miniRT.h"
 
-#include "../incl/miniRT.h"
-
 static int	ft_nb_w(const char *s, char c, char c1)
 {
 	int	i;

@@ -10,6 +10,16 @@ t_vec	vecadd(t_vec v1, t_vec v2)
 	return (new);
 }
 
+t_vec	vecadd3(t_vec v1, t_vec v2, t_vec v3)
+{
+	t_vec	new;
+
+	new.x = v1.x + v2.x + v3.x;
+	new.y = v1.y + v2.y + v3.y;
+	new.z = v1.z + v2.z + v3.z;
+	return (new);
+}
+
 t_vec	newvec(double x, double y, double z)
 {
 	t_vec	new;

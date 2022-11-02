@@ -32,7 +32,7 @@ NAME	= miniRT
 ### COMPILATION ###
 ##**************###
 CC		= gcc -Ofast
-CFLAGS	= -Wall -Wextra #-Werror #-g3 -fsanitize=address #-fsanitize=address -g3 #-framework CoreFoundation
+CFLAGS	= -Wall -Wextra #-fsanitize=address -g3#-Werror #-g3 -fsanitize=address #-fsanitize=address -g3 #-framework CoreFoundation
 CMLX	= -framework OpenGL -framework AppKit -g -lmlx -Lmlx
 
 ##*******************##
@@ -52,7 +52,8 @@ OBJS = $(addprefix $(OBJ_PATH)/,$(SOURCES:.c=.o))
 ##****************##
 ### SOURCE FILES ###
 ##****************##
-SOURCES	=	debug.c					\
+SOURCES	=	cylinder.c				\
+			debug.c					\
 			free.c					\
 			ft_join.c				\
 			ft_split.c				\
@@ -60,8 +61,10 @@ SOURCES	=	debug.c					\
 			get_next_line_utils.c	\
 			get_next_line.c			\
 			main.c					\
+			plan.c					\
 			windows.c				\
 			generator.c				\
+			sphere.c				\
 			vectors.c				\
 			simplify.c				\
 
@@ -94,16 +97,18 @@ clean:
 
 fclean:	clean
 		@rm -f ${NAME}
-		@make -C ${MLX} clean
+		# @make -C ${MLX} clean
 		@printf "\n$(CYAN)Executable files cleaned\n$(END)"
 
 re:	fclean
 	@${MAKE} all
 	@printf "\n$(VIOLET)Cleaned and rebuilt everything\n$(END)"
 
-t:
-	gcc -g -lreadline ${SRCS}
-	./a.out
+t:	all
+	./miniRT scenes/test.rt
+
+t3:	all
+	./miniRT scenes/test3.rt
 
 sus:
 	@echo "$(IRED)           ⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀        $(END)"
