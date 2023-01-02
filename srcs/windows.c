@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   windows.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mlagrang <mlagrang@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/04 12:57:30 by mlagrang          #+#    #+#             */
+/*   Updated: 2022/12/20 11:11:41 by mlagrang         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../incl/miniRT.h"
 
 void	vardef(t_data *data)
@@ -5,17 +17,53 @@ void	vardef(t_data *data)
 	double	aspect_ratio;
 
 	aspect_ratio = 16.0 / 9.0;
-	data->winwidth = 1000;
-	data->winlength = 1000;//data->winwidth / aspect_ratio;
+	data->winwidth = 700;
+	data->winlength = data->winwidth;
 	data->sampleppix = 1;
 	data->depthmax = 50;
+	data->colorit = 0;
 }
 
-int	closewin(t_data *data)
+int	key_hook3(int keycode, t_var *p, t_pal *tab)
 {
-	mlx_clear_window(data->mlx, data->win);
-	mlx_destroy_window(data->mlx, data->win);
-	exit(EXIT_SUCCESS);
+	if (keycode == 40 && p->l->ratio != 0 && p->l->exist)
+		p->l->ratio = 0;
+	else if (keycode == 40 && p->l->ratio == 0 && p->l->exist)
+		p->l->ratio = p->l->init_ratio;
+	srand (10);
+	if (keycode == 15)
+	{
+		p->l->rgb[0] = tab[p->data->colorit].rgb[0];
+		p->l->rgb[1] = tab[p->data->colorit].rgb[1];
+		p->l->rgb[2] = tab[p->data->colorit].rgb[2];
+		p->data->colorit++;
+		if (p->data->colorit > 15)
+			p->data->colorit = 0;
+	}
+	return (0);
+}
+
+int	key_hook2(int keycode, t_var *p)
+{
+	t_pal	tab[16];
+
+	tab[0] = (t_pal){255, 255, 255};
+	tab[1] = (t_pal){192, 192, 192};
+	tab[2] = (t_pal){128, 128, 128};
+	tab[3] = (t_pal){0, 0, 0};
+	tab[4] = (t_pal){255, 0, 0};
+	tab[5] = (t_pal){128, 0, 0};
+	tab[6] = (t_pal){255, 255, 0};
+	tab[7] = (t_pal){128, 128, 0};
+	tab[8] = (t_pal){0, 255, 0};
+	tab[9] = (t_pal){0, 128, 0};
+	tab[10] = (t_pal){0, 255, 255};
+	tab[11] = (t_pal){0, 128, 128};
+	tab[12] = (t_pal){0, 0, 255};
+	tab[13] = (t_pal){0, 0, 128};
+	tab[14] = (t_pal){255, 0, 255};
+	tab[15] = (t_pal){128, 0, 128};
+	key_hook3(keycode, p, tab);
 	return (0);
 }
 
@@ -23,24 +71,11 @@ int	key_hook(int keycode, t_var *p)
 {
 	if (keycode == 53)
 		closewin(p->data);
-	if (keycode == 13)
-		p->c->xyz.y += 5;
-	if (keycode == 0)
-		p->c->xyz.x -= 5;
-	if (keycode == 1)
-		p->c->xyz.y -= 5;
-	if (keycode == 2)
-		p->c->xyz.x += 5;
-
-	if (keycode == 126)
-		p->c->way.y += 0.05;
-	if (keycode == 123)
-		p->c->way.x -= 0.05;
-	if (keycode == 125)
-		p->c->way.y -= 0.05;
-	if (keycode == 124)
-		p->c->way.x += 0.05;
-	
+	if (keycode == 37 && p->a->ratio != 0 && p->a->exist)
+		p->a->ratio = 0;
+	else if (keycode == 37 && p->a->ratio == 0 && p->a->exist)
+		p->a->ratio = p->a->init_ratio;
+	key_hook2(keycode, p);
 	generator(p);
 	return (0);
 }

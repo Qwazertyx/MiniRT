@@ -31,8 +31,8 @@ NAME	= miniRT
 ##***************##
 ### COMPILATION ###
 ##**************###
-CC		= gcc -Ofast
-CFLAGS	= -Wall -Wextra #-fsanitize=address -g3#-Werror #-g3 -fsanitize=address #-fsanitize=address -g3 #-framework CoreFoundation
+CC		= gcc
+CFLAGS	= -Wall -Wextra -Werror #-fsanitize=address -g3
 CMLX	= -framework OpenGL -framework AppKit -g -lmlx -Lmlx
 
 ##*******************##
@@ -52,21 +52,34 @@ OBJS = $(addprefix $(OBJ_PATH)/,$(SOURCES:.c=.o))
 ##****************##
 ### SOURCE FILES ###
 ##****************##
-SOURCES	=	cylinder.c				\
-			debug.c					\
+SOURCES	=	check.c					\
+			color.c					\
+			cylinder.c				\
 			free.c					\
+			ft_ato.c				\
+			ft_create.c				\
+			ft_is2.c				\
+			ft_is.c					\
 			ft_join.c				\
+			ft_malloc.c				\
 			ft_split.c				\
 			ft_testsplit.c			\
+			ft_verif.c				\
+			generator.c				\
 			get_next_line_utils.c	\
 			get_next_line.c			\
+			get.c					\
+			intersection.c			\
 			main.c					\
 			plan.c					\
-			windows.c				\
-			generator.c				\
+			print.c					\
+			shadow.c				\
 			sphere.c				\
+			strmod.c				\
 			vectors.c				\
-			simplify.c				\
+			vectorscalcul.c			\
+			vectorsnotused.c		\
+			windows.c				\
 
 
 ##*********##
@@ -97,7 +110,7 @@ clean:
 
 fclean:	clean
 		@rm -f ${NAME}
-		# @make -C ${MLX} clean
+		@make -C ${MLX} clean
 		@printf "\n$(CYAN)Executable files cleaned\n$(END)"
 
 re:	fclean
@@ -110,7 +123,7 @@ t:	all
 t3:	all
 	./miniRT scenes/test3.rt
 
-sus:
+sus:	all
 	@echo "$(IRED)           ⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀        $(END)"
 	@echo "$(IRED)        ⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀     $(END)"
 	@echo "$(IRED)        ⣼⣿⠋       ⢀⣀⣀⠈⢻⣿⣿⡄    $(END)"
@@ -129,5 +142,33 @@ sus:
 	@echo "$(WHITE)         ░█▀▀░█░█░█▀▀$(END)"
 	@echo "$(WHITE)         ░▀▀█░█░█░▀▀█$(END)"
 	@echo "$(WHITE)         ░▀▀▀░▀▀▀░▀▀▀$(END)"
+	./${NAME} scenes/sus.rt
 
-.PHONY:	all clean fclean re sus mlx mini
+susleft:	all
+			./${NAME} scenes/susleft.rt
+
+susright:	all
+			./${NAME} scenes/susright.rt
+
+susup:	all
+		./${NAME} scenes/susup.rt
+
+susdown:	all
+			./${NAME} scenes/susdown.rt
+
+color:	all
+		./${NAME} scenes/happycolor.rt
+
+42:	all
+		./${NAME} scenes/intheshadow.rt
+
+front:	all
+		./${NAME} scenes/front.rt
+back:	all
+		./${NAME} scenes/back.rt
+left:	all
+		./${NAME} scenes/left.rt
+right:	all
+		./${NAME} scenes/right.rt
+
+.PHONY:	all clean fclean re sus mlx mini susleft susright susup susdown color 42

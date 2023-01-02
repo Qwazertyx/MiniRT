@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_testsplit.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mlagrang <mlagrang@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/04 12:53:52 by mlagrang          #+#    #+#             */
+/*   Updated: 2022/12/14 16:49:20 by mlagrang         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../incl/miniRT.h"
 
-static int	ft_nb_w(const char *s, char c, char c1)
+static int	ft_nb_w2(const char *s, char c, char c1)
 {
 	int	i;
 	int	nb;
@@ -13,7 +25,7 @@ static int	ft_nb_w(const char *s, char c, char c1)
 			i++;
 		if (s[i] != '\0')
 			nb++;
-		while (s[i] != c && s[i] !=c1 && s[i])
+		while (s[i] != c && s[i] != c1 && s[i])
 			i++;
 	}
 	return (nb);
@@ -50,12 +62,12 @@ char	**ft_split2(char const *s, char c, char c1)
 	int		l;
 	char	**tab;
 
-	tab = malloc(sizeof(char *) * (ft_nb_w(s, c, c1) + 1));
+	tab = malloc(sizeof(char *) * (ft_nb_w2(s, c, c1) + 1));
 	if (!tab)
 		return (0);
 	i = 0;
 	j = 0;
-	while (j < ft_nb_w(s, c, c1))
+	while (j < ft_nb_w2(s, c, c1))
 	{
 		while ((s[i] == c || s[i] == c1) && s[i])
 			i++;
@@ -71,4 +83,3 @@ char	**ft_split2(char const *s, char c, char c1)
 	tab[j] = 0;
 	return (tab);
 }
-
